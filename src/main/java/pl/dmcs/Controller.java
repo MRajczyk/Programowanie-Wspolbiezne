@@ -26,8 +26,8 @@ public class Controller {
 
     private void addUserToQueue() {
         ArrayList<UserFile> generatedUserFiles = new ArrayList<UserFile>();
-
-        for(int i = 0; i < Main.NUMBER_OF_FILES_GENERATED; ++i) {
+        int filesToBeGenerated = this.secureRandom.nextInt(Main.MAX_NUMBER_OF_FILES_GENERATED) + 1;
+        for(int i = 0; i < filesToBeGenerated; ++i) {
             generatedUserFiles.add(new UserFile(getRandomFileSize()));
         }
         users.add(new User(this.lastId.toString(), generatedUserFiles));
