@@ -1,18 +1,44 @@
 package pl.dmcs;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 
 public class MainWindow {
+
+    boolean programRunning = false;
+
     JFrame frame;
     JPanel mainPanel;
     JPanel threadsPoolPanel;
-    JPanel userTablePanel;
+    JPanel threadsGroup;
+    JTable queueTable;
+    JPanel queueTablePanel;
     JPanel buttonsPanel;
     JPanel buttonsGroup;
     JButton startButton;
     JButton stopButton;
     JButton addUsersButton;
+
+    JPanel thread1Container;
+    JLabel thread1Id;
+    JLabel thread1Progress;
+    JPanel thread2Container;
+    JLabel thread2Id;
+    JLabel thread2Progress;
+    JPanel thread3Container;
+    JLabel thread3Id;
+    JLabel thread3Progress;
+    JPanel thread4Container;
+    JLabel thread4Id;
+    JLabel thread4Progress;
+    JPanel thread5Container;
+    JLabel thread5Id;
+    JLabel thread5Progress;
+
+    JScrollPane tableScrollPane;
+    DefaultTableModel tableModel;
 
     public void setupWindow() {
         frame = new JFrame("Programowanie Współbieżne");
@@ -21,16 +47,78 @@ public class MainWindow {
         mainPanel = new JPanel(new GridBagLayout());
 
         threadsPoolPanel = new JPanel(new GridBagLayout());
-        userTablePanel = new JPanel(new GridLayout(0, 5, 10, 0));
+        queueTablePanel = new JPanel(new GridLayout(1, 1, 0, 10));
         buttonsPanel = new JPanel(new GridBagLayout());
 
-        // THREAD POOL
+            // THREAD POOL
+        threadsGroup = new JPanel(new GridLayout(0, 5, 0, 10));
+
+            //THREAD 1
+        thread1Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread1Container.setBorder(BorderFactory.createTitledBorder("Thread 1"));
+        thread1Id = new JLabel("Id #");
+        thread1Progress = new JLabel("Progress #%");
+        thread1Container.add(thread1Id);
+        thread1Container.add(thread1Progress);
+        threadsGroup.add(thread1Container);
+
+            //THREAD 2
+        thread2Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread2Container.setBorder(BorderFactory.createTitledBorder("Thread 2"));
+        thread2Id = new JLabel("Id #");
+        thread2Progress = new JLabel("Progress #%");
+        thread2Container.add(thread2Id);
+        thread2Container.add(thread2Progress);
+        threadsGroup.add(thread2Container);
+
+            //THREAD 3
+        thread3Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread3Container.setBorder(BorderFactory.createTitledBorder("Thread 3"));
+        thread3Id = new JLabel("Id #");
+        thread3Progress = new JLabel("Progress #%");
+        thread3Container.add(thread3Id);
+        thread3Container.add(thread3Progress);
+        threadsGroup.add(thread3Container);
+
+            //THREAD 4
+        thread4Container = new JPanel(new GridLayout(2, 1, 1, 10));
+        thread4Container.setBorder(BorderFactory.createTitledBorder("Thread 4"));
+        thread4Id = new JLabel("Id #");
+        thread4Progress = new JLabel("Progress #%");
+        thread4Container.add(thread4Id);
+        thread4Container.add(thread4Progress);
+        threadsGroup.add(thread4Container);
+
+            //THREAD 5
+        thread5Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread5Container.setBorder(BorderFactory.createTitledBorder("Thread 5"));
+        thread5Id = new JLabel("Id #");
+        thread5Progress = new JLabel("Progress #%");
+        thread5Container.add(thread5Id);
+        thread5Container.add(thread5Progress);
+        threadsGroup.add(thread5Container);
+
+        threadsPoolPanel.add(threadsGroup);
         threadsPoolPanel.setBorder(BorderFactory.createTitledBorder("Thread pool"));
         mainPanel.add(threadsPoolPanel, new GridBagConstraints(0, 0, 1, 1, 0.8, 0.3, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
-        // USER TABLE
-        userTablePanel.setBorder(BorderFactory.createTitledBorder("User Table"));
-        mainPanel.add(userTablePanel, new GridBagConstraints(0, 1, 1, 1, 0.8, 0.7, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+        // QUEUE TABLE
+        Object[][] initialData = {{}};
+
+        Object[] columns = {"Id", "Files", "Queue enter time"};
+        tableModel = new DefaultTableModel(initialData, columns);
+        queueTable = new JTable(tableModel);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        queueTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        queueTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        queueTable.getColumnModel().getColumn(0).setMaxWidth(30);
+        queueTable.getColumnModel().getColumn(1).setMinWidth(330);
+        tableScrollPane = new JScrollPane(queueTable);
+        queueTablePanel.add(tableScrollPane);
+
+        queueTablePanel.setBorder(BorderFactory.createTitledBorder("Queue"));
+        mainPanel.add(queueTablePanel, new GridBagConstraints(0, 1, 1, 1, 0.8, 0.7, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
         //BUTTONS
         buttonsGroup = new JPanel(new GridLayout(3, 0, 0, 10));
@@ -39,6 +127,7 @@ public class MainWindow {
         startButton = new JButton("Start");
         startButton.setPreferredSize(buttonSize);
         stopButton = new JButton("Stop");
+        stopButton.setEnabled(false);
         stopButton.setPreferredSize(buttonSize);
         addUsersButton = new JButton("Add Users");
         addUsersButton.setPreferredSize(buttonSize);
@@ -60,5 +149,18 @@ public class MainWindow {
         frame.add(mainPanel);
         frame.setSize(new Dimension(960, 660));
         frame.setVisible(true);
+
+        // EVENT HANDLERS
+        startButton.addActionListener(e -> {
+            this.programRunning = true;
+            this.startButton.setEnabled(false);
+            this.stopButton.setEnabled(true);
+        });
+
+        stopButton.addActionListener(e -> {
+            this.programRunning = false;
+            this.stopButton.setEnabled(false);
+            this.startButton.setEnabled(true);
+        });
     }
 }
