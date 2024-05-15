@@ -112,7 +112,7 @@ public class MainWindow {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         queueTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         queueTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-        queueTable.getColumnModel().getColumn(0).setMaxWidth(30);
+        queueTable.getColumnModel().getColumn(0).setMaxWidth(40);
         queueTable.getColumnModel().getColumn(1).setMinWidth(330);
         tableScrollPane = new JScrollPane(queueTable);
         queueTablePanel.add(tableScrollPane);
