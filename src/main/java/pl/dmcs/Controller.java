@@ -2,6 +2,9 @@ package pl.dmcs;
 
 import java.util.ArrayList;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Controller {
     MainWindow mainWindow;
@@ -13,7 +16,7 @@ public class Controller {
         this.mainWindow = mainWindow;
         this.secureRandom = new SecureRandom();
         this.users = new java.util.ArrayList<User>();
-        this.lastId = 0L;
+        this.lastId = 1L;
 
         this.mainWindow.addUsersButton.addActionListener(e -> {
             for(int i = 0; i < Main.NUMBER_OF_THREADS; ++i) {
@@ -30,6 +33,13 @@ public class Controller {
         for(int i = 0; i < filesToBeGenerated; ++i) {
             generatedUserFiles.add(new UserFile(getRandomFileSize()));
         }
+        generatedUserFiles.sort((o1, o2) -> {
+            if (o1.getFileSize() == o2.getFileSize()) {
+                return 0;
+            }
+
+            return o1.getFileSize() < o2.getFileSize() ? -1 : 1;
+        });
         users.add(new User(this.lastId.toString(), generatedUserFiles));
         this.lastId++;
     }
