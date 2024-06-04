@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class MainWindow {
 
-    boolean programRunning = false;
+    public volatile boolean  programRunning = false;
 
     JFrame frame;
     JPanel mainPanel;
@@ -23,18 +23,28 @@ public class MainWindow {
 
     JPanel thread1Container;
     JLabel thread1Id;
+    JLabel thread1fileSize;
+    JLabel thread1secondsInQueue;
     JLabel thread1Progress;
     JPanel thread2Container;
     JLabel thread2Id;
+    JLabel thread2fileSize;
+    JLabel thread2secondsInQueue;
     JLabel thread2Progress;
     JPanel thread3Container;
     JLabel thread3Id;
+    JLabel thread3fileSize;
+    JLabel thread3secondsInQueue;
     JLabel thread3Progress;
     JPanel thread4Container;
     JLabel thread4Id;
+    JLabel thread4fileSize;
+    JLabel thread4secondsInQueue;
     JLabel thread4Progress;
     JPanel thread5Container;
     JLabel thread5Id;
+    JLabel thread5fileSize;
+    JLabel thread5secondsInQueue;
     JLabel thread5Progress;
 
     JScrollPane tableScrollPane;
@@ -54,47 +64,67 @@ public class MainWindow {
         threadsGroup = new JPanel(new GridLayout(0, 5, 0, 10));
 
             //THREAD 1
-        thread1Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread1Container = new JPanel(new GridLayout(4, 1, 0, 10));
         thread1Container.setBorder(BorderFactory.createTitledBorder("Thread 1"));
-        thread1Id = new JLabel("Id #");
+        thread1Id = new JLabel("User Id #");
+        thread1fileSize = new JLabel("File Size #");
+        thread1secondsInQueue = new JLabel("Seconds in queue: #");
         thread1Progress = new JLabel("Progress #%");
         thread1Container.add(thread1Id);
+        thread1Container.add(thread1fileSize);
+        thread1Container.add(thread1secondsInQueue);
         thread1Container.add(thread1Progress);
         threadsGroup.add(thread1Container);
 
             //THREAD 2
-        thread2Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread2Container = new JPanel(new GridLayout(4, 1, 0, 10));
         thread2Container.setBorder(BorderFactory.createTitledBorder("Thread 2"));
-        thread2Id = new JLabel("Id #");
+        thread2Id = new JLabel("User Id #");
+        thread2fileSize = new JLabel("File Size #");
+        thread2secondsInQueue = new JLabel("Seconds in queue: #");
         thread2Progress = new JLabel("Progress #%");
         thread2Container.add(thread2Id);
+        thread2Container.add(thread2fileSize);
+        thread2Container.add(thread2secondsInQueue);
         thread2Container.add(thread2Progress);
         threadsGroup.add(thread2Container);
 
             //THREAD 3
-        thread3Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread3Container = new JPanel(new GridLayout(4, 1, 0, 10));
         thread3Container.setBorder(BorderFactory.createTitledBorder("Thread 3"));
-        thread3Id = new JLabel("Id #");
+        thread3Id = new JLabel("User Id #");
+        thread3fileSize = new JLabel("File Size #");
+        thread3secondsInQueue = new JLabel("Seconds in queue: #");
         thread3Progress = new JLabel("Progress #%");
         thread3Container.add(thread3Id);
+        thread3Container.add(thread3fileSize);
+        thread3Container.add(thread3secondsInQueue);
         thread3Container.add(thread3Progress);
         threadsGroup.add(thread3Container);
 
             //THREAD 4
-        thread4Container = new JPanel(new GridLayout(2, 1, 1, 10));
+        thread4Container = new JPanel(new GridLayout(4, 1, 1, 10));
         thread4Container.setBorder(BorderFactory.createTitledBorder("Thread 4"));
-        thread4Id = new JLabel("Id #");
+        thread4Id = new JLabel("User Id #");
+        thread4fileSize = new JLabel("File Size #");
+        thread4secondsInQueue = new JLabel("Seconds in queue: #");
         thread4Progress = new JLabel("Progress #%");
         thread4Container.add(thread4Id);
+        thread4Container.add(thread4fileSize);
+        thread4Container.add(thread4secondsInQueue);
         thread4Container.add(thread4Progress);
         threadsGroup.add(thread4Container);
 
             //THREAD 5
-        thread5Container = new JPanel(new GridLayout(2, 1, 0, 10));
+        thread5Container = new JPanel(new GridLayout(4, 1, 0, 10));
         thread5Container.setBorder(BorderFactory.createTitledBorder("Thread 5"));
-        thread5Id = new JLabel("Id #");
+        thread5Id = new JLabel("User Id #");
+        thread5fileSize = new JLabel("File Size #");
+        thread5secondsInQueue = new JLabel("Seconds in queue: #");
         thread5Progress = new JLabel("Progress #%");
         thread5Container.add(thread5Id);
+        thread5Container.add(thread5fileSize);
+        thread5Container.add(thread5secondsInQueue);
         thread5Container.add(thread5Progress);
         threadsGroup.add(thread5Container);
 

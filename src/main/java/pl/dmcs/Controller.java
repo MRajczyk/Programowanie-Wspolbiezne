@@ -15,7 +15,7 @@ public class Controller {
     SecureRandom secureRandom;
     int lastId;
 
-    public static String formatWithUnderscores(long number) {
+    public static String formatWithDots(long number) {
         String reversed = new StringBuilder(Long.toString(number)).reverse().toString();
 
         StringBuilder sb = new StringBuilder();
@@ -79,10 +79,10 @@ public class Controller {
             for(UserFile file: user.getUserFiles()) {
                 if(first) {
                     first = false;
-                    stringBuilder.append(formatWithUnderscores(file.getFileSize()));
+                    stringBuilder.append(formatWithDots(file.getFileSize()));
                 }
                 else {
-                    stringBuilder.append(", ").append(formatWithUnderscores(file.getFileSize()));
+                    stringBuilder.append(", ").append(formatWithDots(file.getFileSize()));
                 }
             }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -92,9 +92,55 @@ public class Controller {
         }
     }
 
+    public synchronized void setThreadLabels(String userId, String fileSize, String threadId, String progress, String secondsInQueue) {
+        switch (threadId) {
+            case "1" -> {
+                mainWindow.thread1Id.setText("User Id " + userId);
+                mainWindow.thread1fileSize.setText("File size " + fileSize);
+                mainWindow.thread1secondsInQueue.setText("Seconds in queue: " + secondsInQueue);
+                mainWindow.thread1Progress.setText("Progress: " + progress);
+            }
+            case "2" -> {
+                mainWindow.thread2Id.setText("User Id " + userId);
+                mainWindow.thread2fileSize.setText("File size " + fileSize);
+                mainWindow.thread2secondsInQueue.setText("Seconds in queue: " + secondsInQueue);
+                mainWindow.thread2Progress.setText("Progress: " + progress);
+            }
+            case "3" -> {
+                mainWindow.thread3Id.setText("User Id " + userId);
+                mainWindow.thread3fileSize.setText("File size " + fileSize);
+                mainWindow.thread3secondsInQueue.setText("Seconds in queue: " + secondsInQueue);
+                mainWindow.thread3Progress.setText("Progress: " + progress);
+            }
+            case "4" -> {
+                mainWindow.thread4Id.setText("User Id " + userId);
+                mainWindow.thread4fileSize.setText("File size " + fileSize);
+                mainWindow.thread4secondsInQueue.setText("Seconds in queue: " + secondsInQueue);
+                mainWindow.thread4Progress.setText("Progress: " + progress);
+            }
+            case "5" -> {
+                mainWindow.thread5Id.setText("User Id " + userId);
+                mainWindow.thread5fileSize.setText("File size " + fileSize);
+                mainWindow.thread5secondsInQueue.setText("Seconds in queue: " + secondsInQueue);
+                mainWindow.thread5Progress.setText("Progress: " + progress);
+            }
+        }
+    }
+
+    public synchronized void setThreadProgress(String threadId, String progress) {
+        switch (threadId) {
+            case "1" -> mainWindow.thread1Progress.setText("Progress: " + progress);
+            case "2" -> mainWindow.thread2Progress.setText("Progress: " + progress);
+            case "3" -> mainWindow.thread3Progress.setText("Progress: " + progress);
+            case "4" -> mainWindow.thread4Progress.setText("Progress: " + progress);
+            case "5" -> mainWindow.thread5Progress.setText("Progress: " + progress);
+        }
+    }
+
     //function formula y = t^(1/x) + x/s
     //t = time, x = number of users in queue, s = file size
-    public synchronized HighestScoreUserAndFile getHighestScoreUser() {
+    public synchronized HighestScoreUserAndFile getHighestScoreUserAndFile() {
+        LocalDateTime timeNow = LocalDateTime.now();
         double maxQueueFunctionValue = -1D;
         User nextInQueueUser = null;
 
@@ -102,7 +148,7 @@ public class Controller {
             for (User user : users) {
                 long filesize = user.getNextUserFileSizeInQueue();
                 int usersInQueue = users.size();
-                long secondsSinceJoin = Duration.between(LocalDateTime.now(), user.getTimeOfJoin()).toSeconds();
+                long secondsSinceJoin = Duration.between(user.getTimeOfJoin(), timeNow).toSeconds();
 
                 double functionResult = Math.pow(secondsSinceJoin, 1D / usersInQueue) + (double)usersInQueue / filesize;
                 if(functionResult > maxQueueFunctionValue) {
@@ -113,7 +159,14 @@ public class Controller {
         }
 
         if(nextInQueueUser != null) {
-            return new HighestScoreUserAndFile(nextInQueueUser.getId(), nextInQueueUser.popNextUserFile());
+            HighestScoreUserAndFile returnValue = new HighestScoreUserAndFile(nextInQueueUser.getId(), nextInQueueUser.popNextUserFile(), Duration.between(nextInQueueUser.getTimeOfJoin(), timeNow).toSeconds());
+            if(nextInQueueUser.getUserFiles().isEmpty()) {
+                users.remove(nextInQueueUser);
+            }
+            synchronized (mutex) {
+                redrawQueueTable();
+            }
+            return returnValue;
         }
 
         return null;
