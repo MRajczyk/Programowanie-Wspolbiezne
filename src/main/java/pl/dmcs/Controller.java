@@ -36,9 +36,9 @@ public class Controller {
         this.lastId = 1;
 
         this.mainWindow.addUsersButton.addActionListener(e -> {
-            for(int i = 0; i < Main.NUMBER_OF_THREADS; ++i) {
+//            for(int i = 0; i < Main.NUMBER_OF_THREADS; ++i) {
                 addNewUsersToQueue();
-            }
+//            }
 
             redrawQueueTable();
         });

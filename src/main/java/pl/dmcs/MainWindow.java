@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class MainWindow {
 
-    public volatile boolean  programRunning = false;
+    public volatile boolean programRunning = false;
 
     JFrame frame;
     JPanel mainPanel;
